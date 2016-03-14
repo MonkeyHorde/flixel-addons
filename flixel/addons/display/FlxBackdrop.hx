@@ -72,7 +72,7 @@ class FlxBackdrop extends FlxSprite
 		_spaceY = SpaceY;
 		
 		_ppoint = new Point();
-		_colorTransform = new ColorTransform(1.0, 1.0, 1.0, 1.0, 0, 0, 0, 0);
+		_colorTransform = new ColorTransform();
 		
 		scrollFactor.x = ScrollX;
 		scrollFactor.y = ScrollY;
@@ -85,8 +85,6 @@ class FlxBackdrop extends FlxSprite
 
 	override public function set_alpha(alpha:Float):Float
 	{
-		trace("Setting alpha to: " + alpha);
-
 		super.alpha = alpha;
 		_colorTransform.alphaMultiplier = alpha;
 

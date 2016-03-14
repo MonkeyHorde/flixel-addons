@@ -1,6 +1,7 @@
 package flixel.addons.display;
 
 import flash.display.BitmapData;
+import flash.geom.ColorTransform;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flixel.FlxG;
@@ -28,6 +29,8 @@ class FlxBackdrop extends FlxSprite
 	
 	private var _spaceX:Int = 0;
 	private var _spaceY:Int = 0;
+
+	private var _colorTransform:ColorTransform;
 	
 	/**
 	 * Frame used for tiling
@@ -69,6 +72,7 @@ class FlxBackdrop extends FlxSprite
 		_spaceY = SpaceY;
 		
 		_ppoint = new Point();
+		_colorTransform = new ColorTransform(1.0, 1.0, 1.0, 1.0, 0, 0, 0, 0);
 		
 		scrollFactor.x = ScrollX;
 		scrollFactor.y = ScrollY;
@@ -77,6 +81,16 @@ class FlxBackdrop extends FlxSprite
 			loadGraphic(Graphic);
 		
 		FlxG.signals.gameResized.add(onGameResize);
+	}
+
+	override public function set_alpha(alpha:Float):Float
+	{
+		trace("Setting alpha to: " + alpha);
+
+		super.alpha = alpha;
+		_colorTransform.alphaMultiplier = alpha;
+
+		return alpha;
 	}
 	
 	override public function destroy():Void 
@@ -165,7 +179,7 @@ class FlxBackdrop extends FlxSprite
 					return;
 				
 				_flashRect2.setTo(0, 0, graphic.width, graphic.height);
-				camera.copyPixels(frame, framePixels, _flashRect2, _ppoint);
+				camera.copyPixels(frame, framePixels, _flashRect2, _ppoint, _colorTransform);
 			}
 			else
 			{
@@ -198,7 +212,7 @@ class FlxBackdrop extends FlxSprite
 					_matrix.tx = tx + (_ppoint.x + currTileX);
 					_matrix.ty = ty + (_ppoint.y + currTileY);
 					
-					drawItem.addQuad(_tileFrame, _matrix);
+					drawItem.addQuad(_tileFrame, _matrix, _colorTransform);
 				}
 			}
 		}
